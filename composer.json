@@ -1,0 +1,41 @@
+{
+    "name": "ymlluo/social-chat",
+    "description": ":package_description",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Author Name",
+            "email": "author@email.com",
+            "homepage": "http://author.com"
+        }
+    ],
+    "homepage": "https://github.com/ymlluo/social-chat",
+    "keywords": ["Laravel", "SocialChat"],
+    "require": {
+        "illuminate/support": "~7|~8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~5|~6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ymlluo\\SocialChat\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ymlluo\\SocialChat\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ymlluo\\SocialChat\\SocialChatServiceProvider"
+            ],
+            "aliases": {
+                "SocialChat": "Ymlluo\\SocialChat\\Facades\\SocialChat"
+            }
+        }
+    }
+}
