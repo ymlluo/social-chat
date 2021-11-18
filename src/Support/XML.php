@@ -1,9 +1,6 @@
 <?php
 
-namespace ymlluo\Wechat\Support;
-
-use ymlluo\Wechat\Exceptions\ErrorCode;
-use ymlluo\Wechat\Exceptions\WxException;
+namespace Ymlluo\SocialChat\Support;
 
 class XML
 {

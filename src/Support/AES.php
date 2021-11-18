@@ -1,26 +1,25 @@
 <?php
 
 
-namespace ymlluo\Wechat\Support;
+namespace Ymlluo\SocialChat\Support;
 
-
-use ymlluo\Wechat\Exceptions\ErrorCode;
-use ymlluo\Wechat\Exceptions\WxException;
 
 class AES
 {
 
 
-    public static function encode(string $text,string $key,string $iv){
-        if(self::isKey($key) && self::isIv($iv)){
+    public static function encode(string $text, string $key, string $iv)
+    {
+        if (self::isKey($key) && self::isIv($iv)) {
             return openssl_encrypt($text, 'AES-256-CBC', $key, OPENSSL_ZERO_PADDING, $iv);
         }
-       return false;
+        return false;
     }
 
-    public static function decode(string $text,string $key,string $iv){
-        if(self::isKey($key) && self::isIv($iv)){
-            return  $decrypt = openssl_decrypt($text, 'AES-256-CBC', $key, OPENSSL_ZERO_PADDING,$iv);
+    public static function decode(string $text, string $key, string $iv)
+    {
+        if (self::isKey($key) && self::isIv($iv)) {
+            return $decrypt = openssl_decrypt($text, 'AES-256-CBC', $key, OPENSSL_ZERO_PADDING, $iv);
         }
         return false;
     }
@@ -35,7 +34,7 @@ class AES
 
     public static function isIv(string $iv)
     {
-       return strlen($iv) === 16;
+        return strlen($iv) === 16;
     }
 
 

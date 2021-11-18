@@ -13,15 +13,12 @@ interface Message
 
     public function createTime();
 
-    public function msgType();
+    public function type();
 
     public function event();
 
-    public function getData();
-
     public function reply();
 
-    public function send();
 
 
 }

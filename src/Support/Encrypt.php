@@ -1,15 +1,11 @@
 <?php
 
+namespace Ymlluo\SocialChat\Support;
 
-namespace ymlluo\Wechat\Support;
-
-
-use ymlluo\Wechat\Exceptions\ErrorCode;
-use ymlluo\Wechat\Exceptions\WxException;
+use Exception;
 
 class Encrypt
 {
-
     /**
      *
      * @param $appId
@@ -17,7 +13,7 @@ class Encrypt
      * @param $token
      * @param $xmlStr
      * @return string
-     * @throws \Exception
+     * @throws Exception
      */
     public static function encodeXML($appId, $aesKey, $token, $xmlStr): string
     {
@@ -27,7 +23,7 @@ class Encrypt
         $key = self::decodeKey($aesKey);
         $cipherText = openssl_encrypt($xmlStr, 'AES-256-CBC', $key, OPENSSL_ZERO_PADDING, substr($key, 0, 16));
         if ($cipherText === false) {
-            throw new \Exception('Encrypt AES Error');
+            throw new Exception('Encrypt AES Error');
         }
         $timestamp = time();
         $nonce = rand(100000000, 999999999);
@@ -36,26 +32,14 @@ class Encrypt
         return $xml;
     }
 
-    public static function decodeXML($xmlStr, $aesKey)
+    /**
+     * @param string $aesKey
+     * @return false|string
+     */
+    public static function decodeKey(string $aesKey)
     {
-        $arr = XML::xml2Array($xmlStr);
-        $cipherText = $arr['Encrypt'];
-        $key = self::decodeKey($aesKey);
-        $decrypt = openssl_decrypt($cipherText, 'AES-256-CBC', $key, OPENSSL_ZERO_PADDING, substr($key, 0, 16));
-        if ($decrypt === false) {
-            throw new \Exception('Decrypt AES Error');
-        }
-        $padLen = ord(substr($decrypt, -1));
-        if ($padLen > 0 && $padLen <= 32) {
-            $decrypt = substr($decrypt, 0, -$padLen);;
-        }
-        $content = substr($decrypt, 16);
-        $len = unpack("N", substr($content, 0, 4));
-        $len = $len[1];
-        $xml = substr($content, 4, $len);
-        return $xml;
+        return base64_decode($aesKey . '=');
     }
-
 
     /**
      *
@@ -72,13 +56,24 @@ class Encrypt
         return sha1(implode('', $array));
     }
 
-    /**
-     * @param string $aesKey
-     * @return false|string
-     */
-    public static function decodeKey(string $aesKey)
+    public static function decodeXML($xmlStr, $aesKey)
     {
-        return base64_decode($aesKey . '=');
+        $arr = XML::xml2Array($xmlStr);
+        $cipherText = $arr['Encrypt'];
+        $key = self::decodeKey($aesKey);
+        $decrypt = openssl_decrypt($cipherText, 'AES-256-CBC', $key, OPENSSL_ZERO_PADDING, substr($key, 0, 16));
+        if ($decrypt === false) {
+            throw new Exception('Decrypt AES Error');
+        }
+        $padLen = ord(substr($decrypt, -1));
+        if ($padLen > 0 && $padLen <= 32) {
+            $decrypt = substr($decrypt, 0, -$padLen);
+        }
+        $content = substr($decrypt, 16);
+        $len = unpack("N", substr($content, 0, 4));
+        $len = $len[1];
+        $xml = substr($content, 4, $len);
+        return $xml;
     }
 
 }
